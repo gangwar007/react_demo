@@ -31,6 +31,11 @@ import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import SplashScreen from 'react-native-splash-screen';
 
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
+
+const Tab = createBottomTabNavigator();
+
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
@@ -70,6 +75,7 @@ function App(): JSX.Element {
   }, [])
 
   const backgroundStyle = {
+    flex:1,
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
@@ -81,9 +87,14 @@ function App(): JSX.Element {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-     
+     <NavigationContainer>
+     <Tab.Navigator>
+      <Tab.Screen name="Trendings" component={ProductListView } />
+      <Tab.Screen name="Settings" component={ProductListView} />
+    </Tab.Navigator>
+    </NavigationContainer>
 
-        <ProductListView/>
+       {/* <ProductListView/> */}
         
       </Provider>
     </SafeAreaView>

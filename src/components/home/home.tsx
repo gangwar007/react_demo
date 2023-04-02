@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, FlatList, Image, RefreshControl } from "react-native";
+import { Text, View, FlatList, Image, RefreshControl, ActivityIndicator } from "react-native";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { fetchUser } from "../../redux/reducer/RootReducer";
+import { fetchUser,clearAllUser } from "../../redux/reducer/RootReducer";
 
 const star = require("../../assets/star.png");
 
@@ -31,6 +31,7 @@ const UserListView = () => {
     return (
       <View
         style={{
+          flex:1,
           backgroundColor: "#fff",
           margin: 4,
           paddingLeft: 8,
@@ -38,40 +39,48 @@ const UserListView = () => {
           paddingBottom: 8,
         }}
       >
-        <View style={styles.info}>
           <Text style={{ fontSize: 15, fontWeight: "bold", marginBottom: 4 }}>
             {item.name}
           </Text>
           <Text style={styles.price}>{item.description}</Text>
           <View style={styles.repo}>
-            <View style={styles.rating}>
+            <View style={styles.userDetail}>
               <Image
                 style={styles.image}
                 source={{ uri: item.owner.avatar_url }}
               />
-              <Text style={styles.full_name}>{item.full_name}</Text>
+              <Text style={styles.full_name} numberOfLines={3}>{item.full_name}</Text>
             </View>
             <View style={styles.rating}>
               <Image style={styles.image} source={star} />
               <Text style={styles.full_name}>{item.stargazers_count}</Text>
             </View>
           </View>
-        </View>
       </View>
     );
   };
 
   const onRefresh = () => {
+    dispatch(clearAllUser());
     dispatch(fetchUser());
   };
 
   const fetchMoreData = () => {
     setPage(page + 1);
+   
   };
+
+  const LoaderComp= ()=> {
+    if(userData.root.loading){
+      return <View>
+        <ActivityIndicator />
+      </View>
+    }
+  }
 
   return (
     <FlatList
-      data={userData.root.userData.items}
+      data={userData.root.userData}
       renderItem={({ item }) => renderProduct(item)}
       keyExtractor={(item, index) => index + ""}
       refreshControl={
@@ -83,6 +92,7 @@ const UserListView = () => {
       }
       onEndReachedThreshold={0.2}
       onEndReached={fetchMoreData}
+      ListFooterComponent={LoaderComp}
       // refreshing={state.isFetching}
     />
   );
@@ -104,17 +114,24 @@ const styles = {
   },
   repo: {
     flexDirection: "row",
-    fontSize: 12,
     margin: 10,
-    justifyContent: "space-between",
   },
   full_name: {
     fontSize: 12,
     margin: 5,
   },
   rating: {
+    flex:1,
     flexDirection: "row",
+    marginLeft:10,
+    justifyContent:'flex-end'
+
   },
+  userDetail:{
+    flex:3,
+    flexDirection: "row",
+    marginRight:10
+  }
 };
 
 export default UserListView;
