@@ -19,7 +19,6 @@ const UserListView = () => {
   );
 
   useEffect(() => {
-    console.log("aaaaaa", userData);
     setRefreshing(false);
   }, [userData]);
 
@@ -30,19 +29,11 @@ const UserListView = () => {
   const renderProduct = (item) => {
     return (
       <View
-        style={{
-          flex:1,
-          backgroundColor: "#fff",
-          margin: 4,
-          paddingLeft: 8,
-          paddingTop: 8,
-          paddingBottom: 8,
-        }}
-      >
-          <Text style={{ fontSize: 15, fontWeight: "bold", marginBottom: 4 }}>
+        style={styles.main} >
+          <Text style={styles.text}>
             {item.name}
           </Text>
-          <Text style={styles.price}>{item.description}</Text>
+          <Text style={styles.description}>{item.description}</Text>
           <View style={styles.repo}>
             <View style={styles.userDetail}>
               <Image
@@ -99,6 +90,17 @@ const UserListView = () => {
 };
 
 const styles = {
+  main:{
+    flex:1,
+    backgroundColor: "#fff",
+    margin: 4,
+    paddingLeft: 8,
+    paddingTop: 8,
+    paddingBottom: 8,
+  },
+  text:{
+     fontSize: 15, fontWeight: "bold", marginBottom: 4 
+  },
   image: {
     width: "12%",
     aspectRatio: 1,
@@ -107,9 +109,10 @@ const styles = {
   info: {
     marginTop: 2,
   },
-  name: {
+  
+  description: {
     fontSize: 12,
-    fontWeight: "bold",
+    
     marginBottom: 10,
   },
   repo: {
