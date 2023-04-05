@@ -28,7 +28,7 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import ProductListView from './components/home/home';
 import { Provider } from 'react-redux';
-import { store } from './redux/store';
+import {store} from './redux/store';
 import SplashScreen from 'react-native-splash-screen';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';

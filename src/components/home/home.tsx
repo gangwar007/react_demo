@@ -23,7 +23,7 @@ const UserListView = () => {
   }, [userData]);
 
   useEffect(() => {
-    dispatch(fetchUser(page)  as any);
+    dispatch(fetchUser() as any);
   }, [page]);
 console.log(userData,"userData");
 
