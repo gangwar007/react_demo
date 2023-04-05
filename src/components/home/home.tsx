@@ -25,7 +25,6 @@ const UserListView = () => {
   useEffect(() => {
     dispatch(fetchUser() as any);
   }, [page]);
-console.log(userData,"userData");
 
   const renderProduct = (item:any) => {
     return (
@@ -34,32 +33,39 @@ console.log(userData,"userData");
           <Text style={styles.text}>
             {item.name}
           </Text>
-          <Text style={styles.description}>{item.description}</Text>
+          <Text style={styles.description}>{item?.description}</Text>
           <View style={styles.repo}>
-            <View style={styles.userDetail}>
+            <View style={styles["user-detail"]}>
               <Image
                 style={styles.image}
-                source={{ uri: item.owner.avatar_url }}/>
-              <Text style={styles.full_name} numberOfLines={3}>{item.full_name}</Text>
+                source={{ uri: item?.owner?.avatar_url }}/>
+              <Text style={styles["full-name"]} numberOfLines={3}>{item?.full_name}</Text>
             </View>
             <View style={styles.rating}>
               <Image style={styles.image} source={star} />
-              <Text style={styles.full_name}>{item.stargazers_count}</Text>
+              <Text style={styles["full-name"]}>{item?.stargazers_count}</Text>
             </View>
           </View>
       </View>
     );
   };
 
+  // refresh data on pull to refresh
+
   const onRefresh = () => {
     dispatch(clearAllUser());
     dispatch(fetchUser() as any);
   };
 
+
+  // it's use for pagination and increase the count
+
   const fetchMoreData = () => {
     setPage(page + 1);
    
   };
+
+// it's a loader for fetching data from api
 
   const LoaderComp= ()=> {
     if(userData.root.loading){
@@ -70,9 +76,9 @@ console.log(userData,"userData");
   }
 
   return (
-    userData?.root?.userData == '' ? <Text style={styles.error}>{userData.root.errorMassege} </Text>: <FlatList
-      data={userData.root.userData}
-      renderItem={({ item }) => renderProduct(item)}
+     <FlatList
+      data={userData.root.userData ||[]}
+      renderItem={({ item }) => userData?.root?.userData == '' ? <Text style={styles.error}>{userData?.root?.errorMassege} </Text>:renderProduct(item)}
       keyExtractor={(item, index) => index + ""}
       refreshControl={
         <RefreshControl
@@ -122,7 +128,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     margin: 10,
   },
-  full_name: {
+  "full-name": {
     fontSize: 12,
     margin: 5,
     color: 'black',
@@ -134,7 +140,7 @@ const styles = StyleSheet.create({
     justifyContent:'flex-end'
 
   },
-  userDetail:{
+  "user-detail":{
     flex:3,
     flexDirection: "row",
     marginRight:10

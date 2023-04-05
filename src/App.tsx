@@ -13,7 +13,7 @@ import {
   StatusBar,
   StyleSheet,
   Text,
-  
+  Image,
   useColorScheme,
   View,
 } from 'react-native';
@@ -35,6 +35,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
+
+
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -67,6 +69,9 @@ function Section({children, title}: SectionProps): JSX.Element {
   );
 }
 
+const home = require("./assets/home.png");
+const settings = require("./assets/settings.png");
+
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -89,11 +94,26 @@ function App(): JSX.Element {
       />
      <NavigationContainer>
      <Tab.Navigator>
-      <Tab.Screen name="Trendings" component={ProductListView } />
-      <Tab.Screen name="Settings" component={ProductListView} />
+      <Tab.Screen name="Trendings" component={ProductListView } options={{tabBarIcon: ({ focused, color, size }) => (
+              <Image source={home}
+                style={{
+                  width: size,
+                  height: size,
+                  borderRadius: size,
+                }}
+              />
+            ),}}/>
+      <Tab.Screen name="Settings" component={ProductListView} options={{tabBarIcon: ({ focused, color, size }) => (
+              <Image source={settings}
+                style={{
+                  width: size,
+                  height: size,
+                  borderRadius: size,
+                }}
+              />
+            ),}}/>
     </Tab.Navigator>
     </NavigationContainer>
-  
       </Provider>
     </SafeAreaView>
   );
