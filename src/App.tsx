@@ -93,9 +93,7 @@ function App(): JSX.Element {
       <Tab.Screen name="Settings" component={ProductListView} />
     </Tab.Navigator>
     </NavigationContainer>
-
-       {/* <ProductListView/> */}
-        
+  
       </Provider>
     </SafeAreaView>
   );

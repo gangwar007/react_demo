@@ -3,11 +3,12 @@ import ApiUrls from "../../utils/ApiUrls";
 
 const initialState = {
   userData: [],
-  loading:false
+  loading:false,
+  errorMassege: ''
 };
 
 export const fetchUser = createAsyncThunk("fetchUser", async (page) => {
-  console.log("URL--->", ApiUrls.base_url + "&page=" + page);
+
   const response = await fetch(ApiUrls.base_url + "&page=" + page);
 
   return response.json();
@@ -28,6 +29,10 @@ const RootReducer = createSlice({
     builder.addCase(fetchUser.fulfilled, (state: any, action) => {
       state.loading= false;
       state.userData = [...state.userData,...action.payload?.items];
+    });
+    builder.addCase(fetchUser.rejected, (state, action ) => {
+         state.loading= false;
+         state.errorMassege = action.error.message || '';
     });
   },
 });

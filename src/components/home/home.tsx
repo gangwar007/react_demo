@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, FlatList, Image, RefreshControl, ActivityIndicator } from "react-native";
+import {StyleSheet, Text, View, FlatList, Image, RefreshControl, ActivityIndicator } from "react-native";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { fetchUser,clearAllUser } from "../../redux/reducer/RootReducer";
 
@@ -12,7 +12,7 @@ const UserListView = () => {
   const [page, setPage] = useState(1);
 
   const { userData } = useSelector(
-    (state) => ({
+    (state:any) => ({
       userData: state,
     }),
     shallowEqual
@@ -23,10 +23,11 @@ const UserListView = () => {
   }, [userData]);
 
   useEffect(() => {
-    dispatch(fetchUser(page));
+    dispatch(fetchUser(page)  as any);
   }, [page]);
+console.log(userData,"userData");
 
-  const renderProduct = (item) => {
+  const renderProduct = (item:any) => {
     return (
       <View
         style={styles.main} >
@@ -38,8 +39,7 @@ const UserListView = () => {
             <View style={styles.userDetail}>
               <Image
                 style={styles.image}
-                source={{ uri: item.owner.avatar_url }}
-              />
+                source={{ uri: item.owner.avatar_url }}/>
               <Text style={styles.full_name} numberOfLines={3}>{item.full_name}</Text>
             </View>
             <View style={styles.rating}>
@@ -53,7 +53,7 @@ const UserListView = () => {
 
   const onRefresh = () => {
     dispatch(clearAllUser());
-    dispatch(fetchUser());
+    dispatch(fetchUser() as any);
   };
 
   const fetchMoreData = () => {
@@ -70,7 +70,7 @@ const UserListView = () => {
   }
 
   return (
-    <FlatList
+    userData?.root?.userData == '' ? <Text style={styles.error}>{userData.root.errorMassege} </Text>: <FlatList
       data={userData.root.userData}
       renderItem={({ item }) => renderProduct(item)}
       keyExtractor={(item, index) => index + ""}
@@ -83,13 +83,13 @@ const UserListView = () => {
       }
       onEndReachedThreshold={0.2}
       onEndReached={fetchMoreData}
-      ListFooterComponent={LoaderComp}
+      ListFooterComponent={LoaderComp as any}
       // refreshing={state.isFetching}
     />
   );
 };
 
-const styles = {
+const styles = StyleSheet.create({
   main:{
     flex:1,
     backgroundColor: "#fff",
@@ -99,7 +99,10 @@ const styles = {
     paddingBottom: 8,
   },
   text:{
-     fontSize: 15, fontWeight: "bold", marginBottom: 4 
+     fontSize: 15, 
+     fontWeight: "bold",
+      marginBottom: 4,
+      color: 'black', 
   },
   image: {
     width: "12%",
@@ -112,7 +115,7 @@ const styles = {
   
   description: {
     fontSize: 12,
-    
+    color: 'black',
     marginBottom: 10,
   },
   repo: {
@@ -122,6 +125,7 @@ const styles = {
   full_name: {
     fontSize: 12,
     margin: 5,
+    color: 'black',
   },
   rating: {
     flex:1,
@@ -134,7 +138,15 @@ const styles = {
     flex:3,
     flexDirection: "row",
     marginRight:10
-  }
-};
+  },
+  error:{
+    textAlign: 'center', 
+    fontWeight: 'bold',
+    fontSize: 18,
+    marginTop: 0,
+    width: 200,
+
+ },
+});
 
 export default UserListView;
